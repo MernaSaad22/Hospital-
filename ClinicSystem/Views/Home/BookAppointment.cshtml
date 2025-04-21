@@ -1,0 +1,128 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@* //without the validation of date and time 9 am to 9 pm and validation date*@
+
+   @*  @model Doctor
+
+@{
+    ViewData["Title"] = "Complete Appointment with " + Model.Name;
+}
+
+<h1>Complete Appointment with  @Model.Name</h1>
+
+<form method="post" asp-action="BookAppointment" asp-controller="Home">
+    <input type="hidden" name="doctorId" value="@Model.Id" />
+
+    <div class="mb-3">
+        <label for="PatientName" class="form-label">Patient Name</label>
+        <input type="text" class="form-control" id="PatientName" name="PatientName" required />
+        <div class="invalid-feedback">
+            Please enter your name.
+        </div>
+    </div>
+
+    
+    <div class="mb-3">
+        <label for="AppointmentDate" class="form-label">Appointment Date</label>
+        <input type="date" class="form-control" id="AppointmentDate" name="AppointmentDate" required />
+        <div class="invalid-feedback">
+            Please select a valid appointment date.
+        </div>
+    </div>
+
+   
+    <div class="mb-3">
+        <label for="AppointmentTime" class="form-label">Appointment Time</label>
+        <input type="time" class="form-control" id="AppointmentTime" name="AppointmentTime" required />
+        <div class="invalid-feedback">
+            Please select a valid appointment time.
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Complete Appointment</button>
+
+</form> *@
+    
+   @* <button type="submit" class="btn btn-primary" onclick="return confirm('your appointment has been successfuly complrted,thank you!')">Complete Appointment</button> *@
+   @* ghat gpt but error *@
+   @*  <button type="submit" class="btn btn-primary">Complete Appointment</button>
+    <script>
+        function validateAndConfirm() {
+            const name = document.getElementById("PatientName").value.trim();
+            const date = document.getElementById("AppointmentDate").value;
+            const time = document.getElementById("AppointmentTime").value;
+
+            if (!name || !date || !time) {
+                alert("Please fill in all fields before submitting.");
+                return false; 
+            }
+
+            return confirm("Your appointment has been successfully completed, thank you!");
+        }
+    </script> *@
+
+
+
+    @* <script>
+        function validateAndConfirm() {
+            const name = document.getElementById("PatientName").value.trim();
+            const date = document.getElementById("AppointmentDate").value;
+            const time = document.getElementById("AppointmentTime").value;
+
+            if (!name || !date || !time) {
+                alert("Please fill in all fields before submitting.");
+                return false; // Stop form submission
+            }
+
+            alert("Your appointment has been successfully completed, thank you!");
+            return false; // Prevent actual form submission for demo purposes
+        }
+    </script> *@
+
+
+@*     //with the validation of date and time *@
+
+           @model Doctor
+
+@{
+    ViewData["Title"] = "Complete Appointment with " + Model.Name;
+}
+
+<h1>Complete Appointment with @Model.Name</h1>
+
+<form asp-action="BookAppointment" asp-controller="Home" method="post">
+    <input type="hidden" name="doctorId" value="@Model.Id" />
+
+    <div class="mb-3">
+        <label for="PatientName" class="form-label">Patient Name</label>
+        <input type="text" class="form-control" id="PatientName" name="PatientName" required />
+        <span class="text-danger">
+            @ViewData.ModelState["PatientName"]?.Errors.FirstOrDefault()?.ErrorMessage
+        </span>
+    </div>
+
+    <div class="mb-3">
+        <label for="AppointmentDate" class="form-label">Appointment Date</label>
+        <input type="date" class="form-control" id="AppointmentDate" name="AppointmentDate" required />
+        <span class="text-danger">
+            @ViewData.ModelState["AppointmentDate"]?.Errors.FirstOrDefault()?.ErrorMessage
+        </span>
+    </div>
+
+    <div class="mb-3">
+        <label for="AppointmentTime" class="form-label">Appointment Time</label>
+        <input type="time" class="form-control" id="AppointmentTime" name="AppointmentTime" required />
+        <span class="text-danger">
+            @ViewData.ModelState["AppointmentTime"]?.Errors.FirstOrDefault()?.ErrorMessage
+        </span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Complete Appointment</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

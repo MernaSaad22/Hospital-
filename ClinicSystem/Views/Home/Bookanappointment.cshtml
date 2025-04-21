@@ -1,0 +1,153 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@* @model IEnumerable<Doctor>
+
+@{
+    ViewData["Title"] = "Book Appointment";
+}
+//one card for testing
+ <h1>Book an Appointment</h1>
+
+
+    <div class="card" style="width: 18rem;">
+    <img src="~/images/doctor1.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">dfknk</h5>
+            <p class="card-text">Specialization</p>
+        <a href="/Home/BookAppointment" class="btn btn-primary">Book Appointment</a>
+        </div>
+    </div> *@
+    @model DoctorswithfilterVM
+   ﻿
+
+@{
+    ViewData["Title"] = "Book an Appointment";
+}
+
+<h1>Book an Appointment</h1>
+
+<div class="container">
+    <div class="row justify-content-center">
+
+
+        <!-- Filter Section -->
+        <section class="py-3 filter-bar">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <form action="/Home/Bookanappointment">
+                            <div class="row">
+                                <!-- Product Name -->
+                                <div class="col-md-3">
+                                    <input type="text" class="form-control" placeholder="Doctor Name" name="doctorName" value="@Model.filteritemsVM.doctorName">
+                                </div>
+
+
+
+                                <!-- Category -->
+                                @* <div class="col-md-2">
+                            <select name="Specialization" class="form-control">
+                                <option>Pediatrics</option>
+                                @foreach (var item in Model.filteritemsVM.Specialization)
+                                {
+                                    if (@Model.filteritemsVM.Specialization.Contains(item))
+                                    {
+                                        <option value="@item" selected>@item</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item">@item</option>
+                                    }
+                                }
+                            </select>
+                        </div> *@
+
+                                <!-- Specialization Filter Dropdown -->
+                                <div class="col-md-2">
+                                    <select name="Specialization" class="form-control">
+                                        <option value=""> Specialization </option>
+                                        @foreach (var item in Model.filteritemsVM.SpecializationList)
+                                        {
+
+                                            <option value="@item" selected="@(item == Model.filteritemsVM.Specialization ? "selected" : null)">
+                                                @item
+                                            </option>
+                                        }
+                                    </select>
+                                </div>
+
+
+
+                                <!-- Rating -->
+                                @* <div class="col-md-2"> *@
+                                @*     <select name="rating" class="form-control"> *@
+                                @*         <option value="">Any Rating</option> *@
+                                @*         <option>option 1</option> *@
+                                @*         <option>option 2</option> *@
+                                @*         <option>option 3</option> *@
+                                @*     </select> *@
+                                @* </div> *@
+
+                                <!-- Hot Product Checkbox -->
+                                @* <div class="col-md-1"> *@
+                                @*     <div class="form-check"> *@
+                                @*         <input type="checkbox" class="form-check-input"> *@
+                                @*         <label class="form-check-label">Hot</label> *@
+                                @*     </div> *@
+                                @* </div> *@
+
+                                <!-- Submit Button -->
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-dark w-100">Search</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+        @if (ViewBag.Message != null)
+        {
+            <div class="alert alert-warning text-center">
+                @ViewBag.Message
+            </div>
+        }
+
+        @foreach (var item in Model.DoctorsVM)
+        {
+            <div class="col-md-4 mb-4 d-flex justify-content-center">
+                <div class="card" style="width: 18rem;">
+                    <img src="~/images/@item.Img" class="card-img-top" alt="@item.Name"
+                         onerror="this.onerror=null;this.src='/images/default.jpg';">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="card-text">@item.Specialization</p>
+
+                        <a href="/Home/BookAppointment?doctorId=@item.Id"  class="btn btn-primary">Book Appointment</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<div class="row my-5">
+    <div class="col-12 d-flex justify-content-center align-content-center">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item"><a class="page-link" href="/Home/Bookanappointment?page=@i">@i</a></li>
+                }
+            </ul>
+        </nav>
+    </div>
+</div>

@@ -4,7 +4,7 @@
 @{
 }
 
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @model IEnumerable<ClinicSystem.Models.Appointment>
 
 @{
@@ -20,6 +20,7 @@
             <th>Patient Name</th>
             <th>Date</th>
             <th>Time</th>
+            <th scope="col"> Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -30,9 +31,41 @@
                 <td>@appointment.PatientName</td>
                 <td>@appointment.AppointmentDate.ToString("yyyy-MM-dd")</td>
                 <td>@appointment.AppointmentTime.ToString(@"hh\:mm")</td>
+                <td>
+                    <a href="/Home/EditAppointment/@appointment.Id" type="button" class="btn btn-warning">Edit</a>
+                    <a href="javascript:;" class="btn btn-danger btn-delete" data-id="@appointment.Id">Delete</a>
+
+                </td>
             </tr>
         }
     </tbody>
 </table>
 
 <a href="/Home/Bookanappointment" class="btn btn-primary">Book a new Appointment</a>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const deleteButtons = document.querySelectorAll(".btn-delete");
+
+        deleteButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                const appointmentId = this.getAttribute("data-id");
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Adjust the controller and action name if needed
+                           window.location.href = `/Home/DeleteAppointment/${appointmentId}`;
+                    }
+                });
+            });
+        });
+    });
+</script>

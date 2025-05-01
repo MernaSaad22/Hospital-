@@ -1,0 +1,49 @@
+﻿@model Appointment
+
+@{
+    ViewBag.Title = "Edit Appointment";
+}
+
+<div class="container">
+    <div class="row mb-3 align-items-center my-3">
+        <div class="col-md-12">
+            <h2 class="display-6">Edit Appointment</h2>
+        </div>
+
+        <form method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="mb-3">
+                <label asp-for="PatientName" class="form-label"></label>
+                <input asp-for="PatientName" class="form-control" />
+                <span asp-validation-for="PatientName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="AppointmentDate" class="form-label"></label>
+                <input asp-for="AppointmentDate" class="form-control" type="date" />
+                <span asp-validation-for="AppointmentDate" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="AppointmentTime" class="form-label"></label>
+                <input asp-for="AppointmentTime" class="form-control" type="time" />
+                <span asp-validation-for="AppointmentTime" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DoctorId" class="form-label"></label>
+                <select asp-for="DoctorId" class="form-control" asp-items="@(new SelectList(ViewBag.Doctors, "Id", "Name"))">
+                    <option value="">Select a Doctor</option>
+                </select>
+                <span asp-validation-for="DoctorId" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

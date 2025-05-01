@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Linq;
+using System.Numerics;
 using ClinicSystem.Data;
 using ClinicSystem.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -199,6 +200,63 @@ namespace ClinicSystem.Controllers
 
             return RedirectToAction("AllAppointments");
         }
+        public IActionResult EditAppointment(int id)
+        {
+            var appointment = _context.Appointments
+                .Include(a => a.Doctor)  
+                .FirstOrDefault(a => a.Id == id);
+
+            if (appointment == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.Doctors = _context.Doctors.ToList(); 
+            return View(appointment);
+        }
+
+        [HttpPost]
+        public IActionResult EditAppointment(Appointment appointment)
+        {
+            var existingAppointment = _context.Appointments
+                .FirstOrDefault(a => a.Id == appointment.Id);
+
+            if (existingAppointment == null)
+            {
+                return NotFound();
+            }
+
+            var doctorExists = _context.Doctors.Any(d => d.Id == appointment.DoctorId);
+            if (!doctorExists)
+            {
+                ViewBag.Doctors = _context.Doctors.ToList();
+                ModelState.AddModelError("DoctorId", "Selected doctor does not exist.");
+                return View(appointment);  
+            }
+
+            existingAppointment.PatientName = appointment.PatientName;
+            existingAppointment.AppointmentDate = appointment.AppointmentDate;
+            existingAppointment.AppointmentTime = appointment.AppointmentTime;
+            existingAppointment.DoctorId = appointment.DoctorId;
+
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(AllAppointments));
+        }
+
+        public IActionResult Deleteappointment(int id)
+        {
+            var deletedappointment = _context.Appointments.Find(id);
+            if (deletedappointment == null)
+            {
+                return NotFound(); 
+            }
+            _context.Remove(deletedappointment);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(AllAppointments));
+           
+        }
+
 
 
 
